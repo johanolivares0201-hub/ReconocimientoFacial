@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EmoVisionPy - Detección de Emociones Faciales</title>
+    <title>EmoVisionPy - Detección de Emociones y Formas</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@
             backdrop-filter: blur(10px);
             margin: 1.5rem auto;
             padding: 1.5rem;
-            max-width: 800px;
+            max-width: 1000px;
         }
 
         .title {
@@ -219,6 +219,87 @@
             border: none;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+
+        .video-upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            background: rgba(102, 126, 234, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-upload-area:hover {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.1);
+        }
+
+        .video-upload-area.dragover {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .results-container {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .shape-item {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            padding: 0.8rem;
+            margin: 0.5rem;
+            display: inline-block;
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-item {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            border-radius: 10px;
+            padding: 0.8rem;
+            margin: 0.5rem;
+            display: inline-block;
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-card {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-content {
+            margin-top: 2rem;
+        }
+
+        .nav-tabs .nav-link {
+            border-radius: 15px 15px 0 0;
+            border: none;
+            background: rgba(0, 0, 0, 0.05);
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+        }
     </style>
 </head>
 
@@ -226,14 +307,30 @@
     <div class="container">
         <div class="main-container">
             <h1 class="title">
-                <small class="text-muted d-block">Sistema de Detección de Emociones Faciales</small>
+                <small class="text-muted d-block">Sistema de Detección de Emociones y Formas Geométricas</small>
             </h1>
 
-            <!-- Detección en Tiempo Real -->
-            <div class="text-center mb-4">
-                <h4><i class="fas fa-video"></i> Detección en Tiempo Real</h4>
-                <p class="text-muted">Usa tu cámara para detectar emociones faciales automáticamente</p>
-            </div>
+            <!-- Navegación por pestañas -->
+            <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="emotions-tab" data-bs-toggle="tab" data-bs-target="#emotions" type="button" role="tab">
+                        <i class="fas fa-smile"></i> Detección de Emociones
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shapes-tab" data-bs-toggle="tab" data-bs-target="#shapes" type="button" role="tab">
+                        <i class="fas fa-shapes"></i> Detección de Formas y Colores
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="mainTabsContent">
+                <!-- Pestaña de Emociones -->
+                <div class="tab-pane fade show active" id="emotions" role="tabpanel">
+                    <div class="text-center mb-4 mt-4">
+                        <h4><i class="fas fa-video"></i> Detección en Tiempo Real</h4>
+                        <p class="text-muted">Usa tu cámara para detectar emociones faciales automáticamente</p>
+                    </div>
 
             <div class="camera-section">
                 <div class="text-center mb-4">
@@ -273,33 +370,140 @@
                 </div>
             </div>
 
-            <!-- Información sobre emociones -->
-            <div class="mt-5">
-                <h5><i class="fas fa-info-circle"></i> Emociones Detectables</h5>
-                <div class="row text-center">
-                    <div class="col-md-2 col-sm-4 col-6 mb-3">
-                        <div class="emotion-emojis">😊</div>
-                        <small>Feliz</small>
+                    <!-- Información sobre emociones -->
+                    <div class="mt-5">
+                        <h5><i class="fas fa-info-circle"></i> Emociones Detectables</h5>
+                        <div class="row text-center">
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="emotion-emojis">😊</div>
+                                <small>Feliz</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="emotion-emojis">😢</div>
+                                <small>Triste</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="emotion-emojis">😠</div>
+                                <small>Enojado</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="emotion-emojis">😲</div>
+                                <small>Sorprendido</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="emotion-emojis">😐</div>
+                                <small>Neutral</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="emotion-emojis">😨</div>
+                                <small>Asustado</small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-2 col-sm-4 col-6 mb-3">
-                        <div class="emotion-emojis">😢</div>
-                        <small>Triste</small>
+                </div>
+
+                <!-- Pestaña de Formas y Colores -->
+                <div class="tab-pane fade" id="shapes" role="tabpanel">
+                    <div class="text-center mb-4 mt-4">
+                        <h4><i class="fas fa-shapes"></i> Detección de Formas Geométricas y Colores</h4>
+                        <p class="text-muted">Sube un video para detectar figuras geométricas y colores automáticamente</p>
                     </div>
-                    <div class="col-md-2 col-sm-4 col-6 mb-3">
-                        <div class="emotion-emojis">😠</div>
-                        <small>Enojado</small>
+
+                    <!-- Área de carga de video -->
+                    <div class="video-upload-area" id="videoUploadArea">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                            <h5>Arrastra y suelta tu video aquí</h5>
+                            <p class="text-muted">o haz clic para seleccionar un archivo</p>
+                            <p class="small text-muted">Formatos soportados: MP4, AVI, MOV, MKV, WMV</p>
+                            <input type="file" id="videoInput" accept="video/*" class="d-none">
+                        </div>
                     </div>
-                    <div class="col-md-2 col-sm-4 col-6 mb-3">
-                        <div class="emotion-emojis">😲</div>
-                        <small>Sorprendido</small>
+
+                    <!-- Botón de procesar -->
+                    <div class="text-center mb-4">
+                        <button id="processVideoBtn" class="btn btn-custom" disabled>
+                            <i class="fas fa-cogs"></i> Procesar Video
+                        </button>
                     </div>
-                    <div class="col-md-2 col-sm-4 col-6 mb-3">
-                        <div class="emotion-emojis">😐</div>
-                        <small>Neutral</small>
+
+                    <!-- Loading -->
+                    <div class="loading hidden" id="videoLoading">
+                        <div class="spinner"></div>
+                        <p>Procesando video...</p>
+                        <small class="text-muted">Esto puede tomar unos minutos dependiendo del tamaño del video</small>
                     </div>
-                    <div class="col-md-2 col-sm-4 col-6 mb-3">
-                        <div class="emotion-emojis">😨</div>
-                        <small>Asustado</small>
+
+                    <!-- Resultados -->
+                    <div class="results-container hidden" id="videoResults">
+                        <h5><i class="fas fa-chart-bar"></i> Resultados del Análisis</h5>
+                        
+                        <!-- Información del video -->
+                        <div class="stats-card hidden" id="videoInfoCard">
+                            <h6><i class="fas fa-video"></i> Información del Video</h6>
+                            <div id="videoInfo"></div>
+                        </div>
+
+                        <!-- Estadísticas generales -->
+                        <div class="stats-card hidden" id="summaryCard">
+                            <h6><i class="fas fa-chart-pie"></i> Resumen General</h6>
+                            <div id="summaryStats"></div>
+                        </div>
+
+                        <!-- Formas detectadas -->
+                        <div class="mt-4">
+                            <h6><i class="fas fa-shapes"></i> Formas Detectadas</h6>
+                            <div id="shapesContainer"></div>
+                        </div>
+
+                        <!-- Colores detectados -->
+                        <div class="mt-4">
+                            <h6><i class="fas fa-palette"></i> Colores Detectados</h6>
+                            <div id="colorsContainer"></div>
+                        </div>
+
+                        <!-- Formas más comunes -->
+                        <div class="mt-4">
+                            <h6><i class="fas fa-trophy"></i> Formas Más Comunes</h6>
+                            <div id="mostCommonShapes"></div>
+                        </div>
+
+                        <!-- Colores más comunes -->
+                        <div class="mt-4">
+                            <h6><i class="fas fa-medal"></i> Colores Más Comunes</h6>
+                            <div id="mostCommonColors"></div>
+                        </div>
+                    </div>
+
+                    <!-- Información sobre formas detectables -->
+                    <div class="mt-5">
+                        <h5><i class="fas fa-info-circle"></i> Formas y Colores Detectables</h5>
+                        <div class="row text-center">
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="shape-emojis">🔵</div>
+                                <small>Círculo</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="shape-emojis">🔺</div>
+                                <small>Triángulo</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="shape-emojis">⬜</div>
+                                <small>Cuadrado</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="shape-emojis">⬛</div>
+                                <small>Rectángulo</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="shape-emojis">♦️</div>
+                                <small>Rombo</small>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <div class="shape-emojis">🎨</div>
+                                <small>Colores</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -314,6 +518,7 @@
         let videoStream = null;
         let isCameraActive = false;
         let detectionInterval = null;
+        let selectedVideoFile = null;
 
         // Mapeo de emociones a emojis
         const emotionEmojis = {
@@ -350,6 +555,19 @@
         const cameraLoading = document.getElementById('cameraLoading');
         const processedImageContainer = document.getElementById('processedImageContainer');
         const processedImage = document.getElementById('processedImage');
+
+        // Elementos del DOM para video
+        const videoUploadArea = document.getElementById('videoUploadArea');
+        const videoInput = document.getElementById('videoInput');
+        const processVideoBtn = document.getElementById('processVideoBtn');
+        const videoLoading = document.getElementById('videoLoading');
+        const videoResults = document.getElementById('videoResults');
+        const videoInfoCard = document.getElementById('videoInfoCard');
+        const summaryCard = document.getElementById('summaryCard');
+        const shapesContainer = document.getElementById('shapesContainer');
+        const colorsContainer = document.getElementById('colorsContainer');
+        const mostCommonShapes = document.getElementById('mostCommonShapes');
+        const mostCommonColors = document.getElementById('mostCommonColors');
 
 
         // Funciones de utilidad
@@ -471,10 +689,222 @@
             }
         }
 
+        // Funciones para procesamiento de video
+        function handleVideoFile(file) {
+            if (file && file.type.startsWith('video/')) {
+                selectedVideoFile = file;
+                processVideoBtn.disabled = false;
+                
+                // Actualizar UI
+                const uploadContent = videoUploadArea.querySelector('.upload-content');
+                uploadContent.innerHTML = `
+                    <i class="fas fa-video fa-3x text-success mb-3"></i>
+                    <h5>Video seleccionado</h5>
+                    <p class="text-muted">${file.name}</p>
+                    <p class="small text-muted">Tamaño: ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="clearVideoSelection()">Cambiar video</button>
+                `;
+            } else {
+                alert('Por favor selecciona un archivo de video válido.');
+            }
+        }
+
+        function clearVideoSelection() {
+            selectedVideoFile = null;
+            processVideoBtn.disabled = true;
+            
+            const uploadContent = videoUploadArea.querySelector('.upload-content');
+            uploadContent.innerHTML = `
+                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                <h5>Arrastra y suelta tu video aquí</h5>
+                <p class="text-muted">o haz clic para seleccionar un archivo</p>
+                <p class="small text-muted">Formatos soportados: MP4, AVI, MOV, MKV, WMV</p>
+                <input type="file" id="videoInput" accept="video/*" class="d-none">
+            `;
+            
+            hideElement(videoResults);
+        }
+
+        async function processVideo() {
+            if (!selectedVideoFile) {
+                alert('Por favor selecciona un video primero.');
+                return;
+            }
+
+            try {
+                showElement(videoLoading);
+                hideElement(videoResults);
+
+                const formData = new FormData();
+                formData.append('video', selectedVideoFile);
+
+                const response = await fetch('/process_video', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    displayVideoResults(result);
+                } else {
+                    const error = await response.json();
+                    alert('Error procesando video: ' + (error.error || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error procesando video: ' + error.message);
+            } finally {
+                hideElement(videoLoading);
+            }
+        }
+
+        function displayVideoResults(result) {
+            if (result.error) {
+                alert('Error: ' + result.error);
+                return;
+            }
+
+            // Mostrar información del video
+            if (result.video_info) {
+                const videoInfo = document.getElementById('videoInfo');
+                videoInfo.innerHTML = `
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <strong>${result.video_info.total_frames}</strong><br>
+                            <small>Frames totales</small>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>${result.video_info.processed_frames}</strong><br>
+                            <small>Frames procesados</small>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>${result.video_info.fps}</strong><br>
+                            <small>FPS</small>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>${result.video_info.duration}s</strong><br>
+                            <small>Duración</small>
+                        </div>
+                    </div>
+                `;
+                showElement(videoInfoCard);
+            }
+
+            // Mostrar estadísticas generales
+            if (result.summary) {
+                const summaryStats = document.getElementById('summaryStats');
+                summaryStats.innerHTML = `
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <strong>${result.summary.total_shapes_detected}</strong><br>
+                            <small>Formas detectadas</small>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>${result.summary.unique_shapes}</strong><br>
+                            <small>Tipos de formas</small>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>${result.summary.unique_colors}</strong><br>
+                            <small>Colores únicos</small>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>${result.all_shapes_found.length}</strong><br>
+                            <small>Formas encontradas</small>
+                        </div>
+                    </div>
+                `;
+                showElement(summaryCard);
+            }
+
+            // Mostrar todas las formas encontradas
+            if (result.all_shapes_found && result.all_shapes_found.length > 0) {
+                shapesContainer.innerHTML = '';
+                result.all_shapes_found.forEach(shape => {
+                    const shapeElement = document.createElement('div');
+                    shapeElement.className = 'shape-item';
+                    shapeElement.innerHTML = `<strong>${shape}</strong>`;
+                    shapesContainer.appendChild(shapeElement);
+                });
+            }
+
+            // Mostrar todos los colores encontrados
+            if (result.all_colors_found && result.all_colors_found.length > 0) {
+                colorsContainer.innerHTML = '';
+                result.all_colors_found.forEach(color => {
+                    const colorElement = document.createElement('div');
+                    colorElement.className = 'color-item';
+                    colorElement.innerHTML = `<strong>${color}</strong>`;
+                    colorsContainer.appendChild(colorElement);
+                });
+            }
+
+            // Mostrar formas más comunes
+            if (result.summary && result.summary.most_common_shapes) {
+                mostCommonShapes.innerHTML = '';
+                result.summary.most_common_shapes.forEach(item => {
+                    const shapeElement = document.createElement('div');
+                    shapeElement.className = 'shape-item';
+                    shapeElement.innerHTML = `
+                        <strong>${item.shape}</strong><br>
+                        <small>${item.count} veces (${item.percentage}%)</small>
+                    `;
+                    mostCommonShapes.appendChild(shapeElement);
+                });
+            }
+
+            // Mostrar colores más comunes
+            if (result.summary && result.summary.most_common_colors) {
+                mostCommonColors.innerHTML = '';
+                result.summary.most_common_colors.forEach(item => {
+                    const colorElement = document.createElement('div');
+                    colorElement.className = 'color-item';
+                    colorElement.innerHTML = `
+                        <strong>${item.color}</strong><br>
+                        <small>${item.count} veces (${item.percentage}%)</small>
+                    `;
+                    mostCommonColors.appendChild(colorElement);
+                });
+            }
+
+            showElement(videoResults);
+        }
 
         // Event listeners
         startCameraBtn.addEventListener('click', startCamera);
         stopCameraBtn.addEventListener('click', stopCamera);
+
+        // Event listeners para video
+        videoUploadArea.addEventListener('click', () => {
+            videoInput.click();
+        });
+
+        videoUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            videoUploadArea.classList.add('dragover');
+        });
+
+        videoUploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            videoUploadArea.classList.remove('dragover');
+        });
+
+        videoUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            videoUploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleVideoFile(files[0]);
+            }
+        });
+
+        videoInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleVideoFile(e.target.files[0]);
+            }
+        });
+
+        processVideoBtn.addEventListener('click', processVideo);
 
         // Limpiar recursos al cerrar la página
         window.addEventListener('beforeunload', () => {
